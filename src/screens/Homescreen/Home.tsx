@@ -1,34 +1,27 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import Header from '../Header/Header';
+import Shortcuts from '../Shortcuts/Shortcuts';
+import Announcement from '../Announcements/Announcement';
+import CommunityBuzz from '../CommunityBuzz/CommunityBuzz';
 
-type RootStackParamList = {
-  Home: undefined;
-  Details: undefined;
-};
-
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
-export function HomeScreen({ navigation }: Props) {
+export const HomeScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
+      <Header />
+      <ScrollView>
+        <Shortcuts />
+        <Announcement />
+        <CommunityBuzz />
+      </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    backgroundColor: '#f8f9fa',
   },
 });
+

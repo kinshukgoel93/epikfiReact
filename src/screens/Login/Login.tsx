@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -9,20 +9,24 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import { StackNavigation } from '../../../App';
 import { CreateUserPayload } from '../../interfaces/userPayloadInterface';
 import { findUser } from '../../services/userService';
 import { responseInterface } from '../../interfaces/responseInterface';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../../../App';
+import { AuthStackParamList, StackNavigation } from '../../navigation/AuthStack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export const Login = () => {
-  const { navigate } = useNavigation<StackNavigation>();
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [loginCode, setLoginCode] = useState<string>('');
   const [responseMessage ,setResponseMessage] =  useState<string>('');
-
+  const { login } = useContext(AuthContext);
+  type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+  const { navigate } = useNavigation<StackNavigation>();
 
   const onCreatingNewAccount = () => {
-    navigate('Signup')
+    navigate('Register')
   }
 
   const onLogin = async () =>{ 
@@ -35,7 +39,7 @@ export const Login = () => {
       const response : responseInterface = await findUser(payload);
       console.log("response",response)
       if(response.Code === 200){
-        navigate('Bespoke',response.Msg)  
+        await login(); 
       }
     } catch (error) {
       setResponseMessage('Failed to create user');
